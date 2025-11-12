@@ -46,6 +46,20 @@ class TasksController < ApplicationController
     redirect_to tasks_path, notice: '¡Tarea eliminada exitosamente!'
   end
 
+  # PATCH /tasks/:id/update_status
+  def update_status
+    task = current_user.tasks.find(params[:id])
+    new_status = params[:status]
+    unless Task.statuses.key?(new_status)
+      return render json: { error: 'Estado inválido' }, status: :unprocessable_entity
+    end
+    if task.update(status: new_status)
+      render json: { ok: true, id: task.id, status: task.status }
+    else
+      render json: { error: task.errors.full_messages.to_sentence }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_task

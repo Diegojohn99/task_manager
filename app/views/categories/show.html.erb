@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>📁 <%= @category.name %></h1>
+    <div>
+      <%= link_to 'Editar', edit_category_path(@category), class: 'btn btn-warning me-2' %>
+      <%= link_to 'Volver', categories_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+
+  <h5 class="mb-3">Tareas en esta categoría</h5>
+  <% tasks = @category.tasks.order(due_date: :asc) %>
+  <% if tasks.any? %>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Vencimiento</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tasks.each do |task| %>
+            <tr>
+              <td><strong><%= task.title %></strong></td>
+              <td><%= truncate(task.description, length: 60) %></td>
+              <td><%= task.due_date&.strftime('%d/%m/%Y') %></td>
+              <td><span class="badge bg-<%= task.status == 'completed' ? 'success' : 'warning' %>"><%= task.status %></span></td>
+              <td><span class="badge bg-<%= task.priority == 'high' ? 'danger' : (task.priority == 'medium' ? 'info' : 'secondary') %>"><%= task.priority %></span></td>
+              <td>
+                <%= link_to '👁️', task_path(task), class: 'btn btn-sm btn-info' %>
+                <%= link_to '✏️', edit_task_path(task), class: 'btn btn-sm btn-warning' %>
+                <%= link_to '🗑️', task_path(task), method: :delete, data: { confirm: '¿Eliminar?' }, class: 'btn btn-sm btn-danger' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="alert alert-info">No hay tareas en esta categoría.</div>
+  <% end %>
+</div>

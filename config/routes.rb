@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   resources :users, only: [:new, :create]
   
   resources :tasks
+  resources :tasks do
+    member do
+      patch :update_status
+    end
+  end
   resources :categories
 
 

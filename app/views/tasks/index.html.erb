@@ -52,6 +52,42 @@
     </div>
   </div>
 
+  <div class="row mb-4" data-controller="drag">
+    <div class="col-md-4" data-drag-target="column" data-status="pending">
+      <h5 class="mb-2">Pendiente</h5>
+      <ul class="list-group min-vh-25">
+        <% @tasks.select { |t| t.status == 'pending' }.each do |task| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center" draggable="true" data-task-id="<%= task.id %>" data-action="dragstart->drag#dragstart">
+            <span><strong><%= task.title %></strong></span>
+            <span class="badge bg-secondary"><%= task.priority %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-4" data-drag-target="column" data-status="in_progress">
+      <h5 class="mb-2">En progreso</h5>
+      <ul class="list-group min-vh-25">
+        <% @tasks.select { |t| t.status == 'in_progress' }.each do |task| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center" draggable="true" data-task-id="<%= task.id %>" data-action="dragstart->drag#dragstart">
+            <span><strong><%= task.title %></strong></span>
+            <span class="badge bg-info"><%= task.priority %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-md-4" data-drag-target="column" data-status="completed">
+      <h5 class="mb-2">Completado</h5>
+      <ul class="list-group min-vh-25">
+        <% @tasks.select { |t| t.status == 'completed' }.each do |task| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center" draggable="true" data-task-id="<%= task.id %>" data-action="dragstart->drag#dragstart">
+            <span><strong><%= task.title %></strong></span>
+            <span class="badge bg-success"><%= task.priority %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
   <% if notice %>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
       <%= notice %>
