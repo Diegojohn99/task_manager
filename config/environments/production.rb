@@ -51,6 +51,8 @@ Rails.application.configure do
 
   # Use simple in-memory cache in production on Render free tier to avoid DB 'cache' configuration
   config.cache_store = :memory_store
+  # Ensure the Solid Cache engine does not try to initialize a separate DB connection
+  config.solid_cache.enabled = false
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
