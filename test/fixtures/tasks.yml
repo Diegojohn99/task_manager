@@ -1,0 +1,15 @@
+one:
+  title: Tarea de ejemplo
+  description: Esta es una tarea de ejemplo
+  due_date: <%= 1.day.from_now %>
+  status: 0
+  priority: 1
+  user: one
+
+two:
+  title: Otra tarea
+  description: Segunda tarea
+  due_date: <%= 3.days.from_now %>
+  status: 0
+  priority: 2
+  user: two

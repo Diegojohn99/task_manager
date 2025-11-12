@@ -1,0 +1,41 @@
+<!-- filepath: c:\Users\DESTOCK\Desktop\Proyecto full stack ruby\task_manager\app\views\tasks\show.html.erb -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h2><%= @task.title %></h2>
+        </div>
+        <div class="card-body">
+          <p><strong>Descripción:</strong></p>
+          <p><%= @task.description %></p>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Fecha Vencimiento:</strong><br><%= @task.due_date.strftime('%d/%m/%Y %H:%M') %></p>
+              <p><strong>Estado:</strong><br>
+                <span class="badge bg-<%= @task.status == 'completed' ? 'success' : 'warning' %>">
+                  <%= @task.status %>
+                </span>
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Prioridad:</strong><br>
+                <span class="badge bg-<%= @task.priority == 'high' ? 'danger' : (@task.priority == 'medium' ? 'info' : 'secondary') %>">
+                  <%= @task.priority %>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <%= link_to '✏️ Editar', edit_task_path(@task), class: 'btn btn-warning' %>
+          <%= link_to '🗑️ Eliminar', task_path(@task), method: :delete, data: { confirm: '¿Eliminar?' }, class: 'btn btn-danger' %>
+          <%= link_to '⬅️ Volver', tasks_path, class: 'btn btn-secondary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

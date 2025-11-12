@@ -1,0 +1,114 @@
+<!-- filepath: c:\Users\DESTOCK\Desktop\Proyecto full stack ruby\task_manager\app\views\tasks\index.html.erb -->
+<div class="container mt-5">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h1>📋 Mis Tareas</h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <%= link_to '➕ Nueva Tarea', new_task_path, class: 'btn btn-success btn-lg' %>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-12">
+      <%= form_with url: tasks_path, method: :get, local: true, class: 'row g-3 align-items-end' do |f| %>
+        <div class="col-md-4">
+          <%= label_tag :q, 'Buscar', class: 'form-label' %>
+          <%= text_field_tag :q, params[:q], class: 'form-control', placeholder: 'Título o descripción' %>
+        </div>
+        <div class="col-md-4">
+          <%= label_tag :status, 'Estado', class: 'form-label' %>
+          <%= select_tag :status,
+                options_for_select([
+                  ['Todos', ''],
+                  ['Pendiente', 'pending'],
+                  ['En progreso', 'in_progress'],
+                  ['Completado', 'completed']
+                ], params[:status]),
+                class: 'form-select' %>
+        </div>
+        <div class="col-md-4">
+          <%= label_tag :priority, 'Prioridad', class: 'form-label' %>
+          <%= select_tag :priority,
+                options_for_select([
+                  ['Todas', ''],
+                  ['Baja', 'low'],
+                  ['Media', 'medium'],
+                  ['Alta', 'high']
+                ], params[:priority]),
+                class: 'form-select' %>
+        </div>
+        <div class="col-md-4">
+          <%= label_tag :category_id, 'Categoría', class: 'form-label' %>
+          <%= select_tag :category_id,
+                options_for_select([["Todas", ""]] + (@categories || []).map { |c| [c.name, c.id] }, params[:category_id]),
+                class: 'form-select' %>
+        </div>
+        <div class="col-md-12 mt-2">
+          <%= submit_tag 'Filtrar', class: 'btn btn-primary me-2' %>
+          <%= link_to 'Limpiar', tasks_path, class: 'btn btn-outline-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% end %>
+
+  <% if @tasks.any? %>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Vencimiento</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @tasks.each do |task| %>
+            <tr>
+              <td><strong><%= task.title %></strong></td>
+              <td><%= truncate(task.description, length: 50) %></td>
+              <td><%= task.due_date.strftime('%d/%m/%Y') %></td>
+              <td>
+                <span class="badge bg-<%= task.status == 'completed' ? 'success' : 'warning' %>">
+                  <%= task.status %>
+                </span>
+              </td>
+              <td>
+                <span class="badge bg-<%= task.priority == 'high' ? 'danger' : (task.priority == 'medium' ? 'info' : 'secondary') %>">
+                  <%= task.priority %>
+                </span>
+              </td>
+              <td>
+                <%= link_to '👁️', task_path(task), class: 'btn btn-sm btn-info' %>
+                <%= link_to '✏️', edit_task_path(task), class: 'btn btn-sm btn-warning' %>
+                <%= link_to '🗑️', task_path(task), method: :delete, data: { confirm: '¿Eliminar?' }, class: 'btn btn-sm btn-danger' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <%= paginate @tasks %>
+    </div>
+  <% else %>
+    <div class="alert alert-info text-center">
+      <h5>No hay tareas aún</h5>
+      <%= link_to 'Crea tu primera tarea', new_task_path, class: 'btn btn-primary mt-2' %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .container { max-width: 1000px; }
+</style>
