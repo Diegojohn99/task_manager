@@ -10,18 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_11_230100) do
-  create_schema "extensions"
-
+ActiveRecord::Schema[8.1].define(version: 2025_11_12_014500) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "extensions.pg_stat_statements"
-  enable_extension "extensions.pgcrypto"
-  enable_extension "extensions.uuid-ossp"
-  enable_extension "graphql.pg_graphql"
   enable_extension "pg_catalog.plpgsql"
-  enable_extension "vault.supabase_vault"
 
-  create_table "public.categories", force: :cascade do |t|
+  create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
@@ -29,7 +22,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_11_230100) do
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
-  create_table "public.tasks", force: :cascade do |t|
+  create_table "tasks", force: :cascade do |t|
     t.bigint "category_id"
     t.datetime "created_at", null: false
     t.text "description"
@@ -43,7 +36,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_11_230100) do
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
-  create_table "public.users", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
     t.string "name"
@@ -51,8 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_11_230100) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "public.categories", "public.users"
-  add_foreign_key "public.tasks", "public.categories"
-  add_foreign_key "public.tasks", "public.users"
-
+  add_foreign_key "categories", "users", on_delete: :cascade
+  add_foreign_key "tasks", "categories", on_delete: :nullify
+  add_foreign_key "tasks", "users", on_delete: :cascade
 end

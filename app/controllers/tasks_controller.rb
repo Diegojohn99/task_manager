@@ -25,6 +25,7 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to tasks_path, notice: '¡Tarea creada exitosamente!'
     else
+      @categories = current_user.categories
       render :new, status: :unprocessable_entity
     end
   end
@@ -37,6 +38,7 @@ class TasksController < ApplicationController
     if @task.update(task_params)
       redirect_to tasks_path, notice: '¡Tarea actualizada exitosamente!'
     else
+      @categories = current_user.categories
       render :edit, status: :unprocessable_entity
     end
   end
