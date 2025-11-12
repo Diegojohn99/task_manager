@@ -51,8 +51,8 @@ Rails.application.configure do
 
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :solid_cache_store
-  # Use the primary database for Solid Cache in production
-  config.solid_cache.connects_to = { database: { writing: :primary, reading: :primary } }
+  # Use the primary database for Solid Cache in production (avoid multiple directives)
+  config.solid_cache.database = :primary
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
